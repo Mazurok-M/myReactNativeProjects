@@ -13,12 +13,12 @@ import {
   Image,
 } from "react-native";
 
-import { useFonts } from "expo-font";
-import * as SplashScreen from "expo-splash-screen";
+// import { useFonts } from "expo-font";
+// import * as SplashScreen from "expo-splash-screen";
 import SvgComponent from "../SvgComponent";
-import { styles } from "../AuthStyles";
+import { styles } from "./AuthStyles";
 
-SplashScreen.preventAutoHideAsync();
+// SplashScreen.preventAutoHideAsync();
 
 const initialState = {
   login: "",
@@ -26,7 +26,7 @@ const initialState = {
   password: "",
 };
 
-export default function RegistrationScreen({ ...props }) {
+export default function RegistrationScreen({ navigation, ...props }) {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setState] = useState("");
   const [passwordShow, setPasswordShow] = useState(true);
@@ -37,20 +37,20 @@ export default function RegistrationScreen({ ...props }) {
   const [avatarImg, setAvatarImg] = useState(false);
   const [avatarBtn, setAvatarBtn] = useState("#ff6c00");
 
-  const [fontsLoaded] = useFonts({
-    Roboto_Regular: require("../../assets/fonts/Roboto/Roboto-Regular.ttf"),
-    Roboto_Medium: require("../../assets/fonts/Roboto/Roboto-Medium.ttf"),
-  });
+  // const [fontsLoaded] = useFonts({
+  //   Roboto_Regular: require("../../assets/fonts/Roboto/Roboto-Regular.ttf"),
+  //   Roboto_Medium: require("../../assets/fonts/Roboto/Roboto-Medium.ttf"),
+  // });
 
-  const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded) {
-      await SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded]);
+  // const onLayoutRootView = useCallback(async () => {
+  //   if (fontsLoaded) {
+  //     await SplashScreen.hideAsync();
+  //   }
+  // }, [fontsLoaded]);
 
-  if (!fontsLoaded) {
-    return null;
-  }
+  // if (!fontsLoaded) {
+  //   return null;
+  // }
 
   const keyboardHide = () => {
     setIsShowKeyboard(false);
@@ -92,7 +92,7 @@ export default function RegistrationScreen({ ...props }) {
 
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
-      <View style={styles.container} onLayout={onLayoutRootView}>
+      <View style={styles.container}>
         <ImageBackground
           style={styles.image}
           source={require("../../assets/images/photo-bg.jpg")}
@@ -139,7 +139,10 @@ export default function RegistrationScreen({ ...props }) {
                   <TextInput
                     value={state.login}
                     onChangeText={(value) =>
-                      setState((prevState) => ({ ...prevState, login: value }))
+                      setState((prevState) => ({
+                        ...prevState,
+                        login: value,
+                      }))
                     }
                     placeholder="Логін"
                     style={{ ...styles.input, borderColor: loginBorderColor }}
@@ -163,7 +166,10 @@ export default function RegistrationScreen({ ...props }) {
                       customOnBlur(setEmailBorderColor);
                     }}
                     onChangeText={(value) =>
-                      setState((prevState) => ({ ...prevState, email: value }))
+                      setState((prevState) => ({
+                        ...prevState,
+                        email: value,
+                      }))
                     }
                   />
                   <View>
@@ -208,8 +214,11 @@ export default function RegistrationScreen({ ...props }) {
                           Зареєструватися
                         </Text>
                       </TouchableOpacity>
-
-                      <TouchableOpacity style={styles.link} activeOpacity={0.8}>
+                      <TouchableOpacity
+                        style={styles.link}
+                        activeOpacity={0.8}
+                        onPress={() => navigation.navigate("Login")}
+                      >
                         <Text style={styles.linkTitle}>
                           Вже є акаунт? Увійти
                         </Text>
