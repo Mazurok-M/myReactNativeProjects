@@ -1,8 +1,78 @@
-import { View, Text, Image } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  FlatList,
+  ScrollView,
+  SectionList,
+  SafeAreaView,
+} from "react-native";
 
 import { StyleSheet } from "react-native";
 
+import { FontAwesome, Feather, AntDesign } from "@expo/vector-icons";
+import { useState } from "react";
+
+const Pictures = [
+  {
+    id: "1",
+    title: "Ліс",
+    url:
+      "D:/Projects/myReactNativeProjects/assets/images/Picture/picture-1.jpg",
+    coment: 1,
+    location: "Ukrain",
+  },
+  {
+    id: "2",
+    title: "Закат",
+    url:
+      "D:/Projects/myReactNativeProjects/assets/images/Picture/picture-2.jpg",
+    coment: 5,
+    location: "Ukrain",
+  },
+  {
+    id: "3",
+    title: "Дім",
+    url:
+      "D:/Projects/myReactNativeProjects/assets/images/Picture/picture-3.jpg",
+    coment: 15,
+    location: "Ukrain",
+  },
+];
+
+const Item = ({ item }) => {
+  console.log(item.url);
+  return (
+    <View>
+      <Image
+        style={styles.img}
+        source={{ uri: item.url }}
+        // source={{ uri: `../../../assets/images/Picture/${item.url}` }}
+      />
+
+      <Text style={styles.nemeTitle}>{item.title}</Text>
+      <View style={styles.comentWrap}>
+        <View style={styles.coment}>
+          <Feather name="message-circle" size={24} color="#BDBDBD" />
+          <Text style={{ marginLeft: 8 }}>{item.coment}</Text>
+        </View>
+        <View style={styles.address}>
+          <AntDesign
+            style={styles.marker}
+            name="enviromento"
+            size={24}
+            color="#BDBDBD"
+          />
+          <Text style={{ marginLeft: 8 }}>{item.location}</Text>
+        </View>
+      </View>
+    </View>
+  );
+};
+
 export default function PostsScreen() {
+  const [pictures, setPictures] = useState(Pictures);
+
   return (
     <View style={styles.container}>
       <View>
@@ -12,10 +82,17 @@ export default function PostsScreen() {
             source={require("../../../assets/images/avatar.jpg")}
           />
           <View>
-            <Text style={styles.name} >Natali Romanova</Text>
-            <Text style={styles.email} >email@example.com</Text>
+            <Text style={styles.name}>Natali Romanova</Text>
+            <Text style={styles.email}>email@example.com</Text>
           </View>
         </View>
+        <SafeAreaView>
+          <FlatList
+            data={pictures}
+            renderItem={({ item }) => <Item item={item} />}
+            keyExtractor={(item) => item.id}
+          />
+        </SafeAreaView>
       </View>
     </View>
   );
@@ -27,10 +104,12 @@ export const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     paddingTop: 32,
     paddingHorizontal: 16,
+    paddingBottom: 80,
   },
   profil: {
     flexDirection: "row",
-   alignItems: "center",
+    alignItems: "center",
+    marginBottom: 32,
   },
   avatar: {
     width: 60,
@@ -43,12 +122,36 @@ export const styles = StyleSheet.create({
     fontFamily: "Roboto_Bold",
     fontSize: 13,
     lineHeight: 15,
-  
   },
   email: {
     fontFamily: "Roboto_Regular",
     fontSize: 11,
     lineHeight: 13,
+    color: "rgba(33, 33, 33, 0.8)",
+  },
+  img: {
+    width: "100%",
+    height: 240,
+    borderRadius: 8,
+    marginBottom: 8,
+    resizeMode: "cover",
+  },
+  nemeTitle: {
+    marginBottom: 11,
+    fontFamily: "Roboto_Medium",
+    fontSize: 16,
+    lineHeight: 19,
     color: "#212121",
-  }
+  },
+  comentWrap: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 35,
+  },
+  coment: {
+    flexDirection: "row",
+  },
+  address: {
+    flexDirection: "row",
+  },
 });

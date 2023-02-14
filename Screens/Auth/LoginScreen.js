@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 
 import {
   Text,
@@ -12,11 +12,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-// import { useFonts } from "expo-font";
-// import * as SplashScreen from "expo-splash-screen";
 import { styles } from "./AuthStyles";
-
-// SplashScreen.preventAutoHideAsync();
 
 const initialState = {
   email: "",
@@ -31,7 +27,6 @@ export default function LoginScreen({ navigation, ...props }) {
   const [emailBorderColor, setEmailBorderColor] = useState("#E8E8E8");
   const [passwordBorderColor, setPasswordBorderColor] = useState("#E8E8E8");
 
-
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
@@ -40,6 +35,7 @@ export default function LoginScreen({ navigation, ...props }) {
   const touchBtn = () => {
     console.log(state);
     setState(initialState);
+    navigation.navigate("Home");
   };
 
   const touchPassword = () => {
@@ -133,14 +129,11 @@ export default function LoginScreen({ navigation, ...props }) {
                   {!isShowKeyboard && (
                     <>
                       <TouchableOpacity style={styles.btn} activeOpacity={0.8}>
-                        <Text style={styles.btnTitle} 
-
-                        onPress={touchBtn}
-                         >
+                        <Text style={styles.btnTitle} onPress={touchBtn}>
                           Увійти
                         </Text>
                       </TouchableOpacity>
-                      
+
                       <TouchableOpacity
                         style={styles.link}
                         activeOpacity={0.8}
