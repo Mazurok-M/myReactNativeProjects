@@ -31,20 +31,6 @@ export default function LoginScreen({ navigation, ...props }) {
   const [emailBorderColor, setEmailBorderColor] = useState("#E8E8E8");
   const [passwordBorderColor, setPasswordBorderColor] = useState("#E8E8E8");
 
-  // const [fontsLoaded] = useFonts({
-  //   Roboto_Regular: require("../../assets/fonts/Roboto/Roboto-Regular.ttf"),
-  //   Roboto_Medium: require("../../assets/fonts/Roboto/Roboto-Medium.ttf"),
-  // });
-
-  // const onLayoutRootView = useCallback(async () => {
-  //   if (fontsLoaded) {
-  //     await SplashScreen.hideAsync();
-  //   }
-  // }, [fontsLoaded]);
-
-  // if (!fontsLoaded) {
-  //   return null;
-  // }
 
   const keyboardHide = () => {
     setIsShowKeyboard(false);
@@ -147,11 +133,14 @@ export default function LoginScreen({ navigation, ...props }) {
                   {!isShowKeyboard && (
                     <>
                       <TouchableOpacity style={styles.btn} activeOpacity={0.8}>
-                        <Text style={styles.btnTitle} onPress={touchBtn}>
+                        <Text style={styles.btnTitle} 
+
+                        onPress={touchBtn}
+                         >
                           Увійти
                         </Text>
                       </TouchableOpacity>
-
+                      
                       <TouchableOpacity
                         style={styles.link}
                         activeOpacity={0.8}

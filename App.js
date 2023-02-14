@@ -14,11 +14,12 @@ SplashScreen.preventAutoHideAsync();
 import { useRoute } from "./router";
 
 export default function App() {
-  const routing = useRoute({});
-
+  const routing = useRoute(null);
+  
   const [fontsLoaded] = useFonts({
     Roboto_Regular: require("./assets/fonts/Roboto/Roboto-Regular.ttf"),
     Roboto_Medium: require("./assets/fonts/Roboto/Roboto-Medium.ttf"),
+    Roboto_Bold:  require("./assets/fonts/Roboto/Roboto-Bold.ttf"),
   });
 
   const onLayoutRootView = useCallback(async () => {
