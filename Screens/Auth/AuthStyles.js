@@ -36,6 +36,7 @@ export const styles = StyleSheet.create({
 
   avatarImg: {
     borderRadius: 16,
+    resizeMode: "cover",
   },
   form: {
     marginHorizontal: 16,

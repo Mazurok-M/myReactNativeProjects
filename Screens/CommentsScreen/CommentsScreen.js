@@ -1,51 +1,84 @@
-import { View, Text, Image, TouchableOpacity, TextInput} from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  TextInput,
+  SafeAreaView,
+  FlatList,
+} from "react-native";
 
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign } from "@expo/vector-icons";
 
 import { StyleSheet } from "react-native";
+import { comments } from "../../Component/Comments";
 
 export default function CommentsScreen() {
   return (
-    <View style={styles.container}>
-      <View>
+    <SafeAreaView style={styles.container}>
       <View style={styles.wrapImg}>
         <Image
           style={styles.img}
           source={require("../../assets/images/Picture/picture-3.jpg")}
         />
       </View>
-      <View style={styles.wrap}>
-        <View style={styles.avatar}>
-        <Image
-          style={styles.avatar}
-          source={require("../../assets/images/avatar.jpg")}
+      <SafeAreaView style={{ flex: 1 }}>
+        <FlatList
+          data={comments}
+          renderItem={({ item }) => {
+            return item.name === "Natali Romanova" ? (
+              <View style={styles.wrap}>
+                <View style={styles.commentsWrapFirst}>
+                  <View style={styles.comment}>
+                    <Text style={styles.commentText}>{item.text}</Text>
+                    <View style={styles.commentDateWrap}>
+                      <Text style={styles.commentDate}> {item.date} </Text>
+                      <View style={styles.border}></View>
+                      <Text style={styles.commentDate}>{item.time}</Text>
+                    </View>
+                  </View>
+                </View>
+                <View style={styles.avatar}>
+                  <Image
+                    style={styles.avatar}
+                    source={require("../../assets/images/avatar.jpg")}
+                  />
+                </View>
+              </View>
+            ) : (
+              <View style={styles.wrap}>
+                <View style={styles.avatar}>
+                  <Image
+                    style={styles.avatar}
+                    source={require("../../assets/images/avatar-2.jpg")}
+                  />
+                </View>
+                <View style={styles.commentsWrap}>
+                  <View style={styles.comment}>
+                    <Text style={styles.commentText}>{item.text}</Text>
+                    <View style={styles.commentDateWrap}>
+                      <Text style={styles.commentDate}> {item.date} </Text>
+                      <View style={styles.border}></View>
+                      <Text style={styles.commentDate}>{item.time}</Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            );
+          }}
+          keyExtractor={(item) => item.id}
+          // ListFooterComponent={() => (
+          //   <TextInput placeholder="Коментувати..." style={styles.input} />
+          // )}
         />
-        </View>
-        <View style={styles.commentsWrap}>
-          <View style={styles.comment}>
-            <Text style={styles.commentText}>
-              Really love your most recent photo. I’ve been trying to capture
-              the same thing for a few months and would love some tips!
-            </Text>
-            <View style={styles.commentDateWrap}>
-              <Text style={styles.commentDate}> 09 июня, 2020 </Text>
-              <View style={styles.border}></View>
-              <Text style={styles.commentDate}> 08:40</Text>
-            </View>
-          </View>
-        </View>
+      </SafeAreaView>
+      <View style={{ paddingTop: 5 }}>
+        <TextInput placeholder="Коментувати..." style={styles.input} />
       </View>
-      </View>
-      
-      {/* <TouchableOpacity> */}
-        <TextInput placeholder="Коментувати..."
-        style={styles.input}
-        />
-      {/* </TouchableOpacity> */}
       <TouchableOpacity style={styles.btn}>
-      <AntDesign name="arrowup" size={14} color="#ffffff" />
+        <AntDesign name="arrowup" size={14} color="#ffffff" />
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -66,12 +99,23 @@ export const styles = StyleSheet.create({
   img: { resizeMode: "cover", width: "100%", borderRadius: 8 },
   wrap: {
     flexDirection: "row",
+    marginBottom: 24,
+    width: "100%",
   },
-  avatar:{
+  avatar: {
     width: 28,
     height: 28,
-    borderRadius:14,
-    
+    borderRadius: 14,
+  },
+  commentsWrapFirst: {
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    backgroundColor: "rgba(0, 0, 0, 0.03)",
+    // marginLeft: 16,
+    // marginRight: 16,
+    borderTopLeftRadius: 6,
+    borderBottomLeftRadius: 6,
+    borderBottomRightRadius: 6,
   },
   commentsWrap: {
     paddingHorizontal: 16,
@@ -81,9 +125,15 @@ export const styles = StyleSheet.create({
     marginRight: 16,
     borderTopRightRadius: 6,
     borderBottomLeftRadius: 6,
-    borderBottomRightRadius:6,
+    borderBottomRightRadius: 6,
   },
   comment: {
+    // color: "#212121",
+    // fontFamily: "Roboto_Regular",
+    // fontSize: 13,
+    // lineHeight: 18,
+  },
+  commentText: {
     color: "#212121",
     fontFamily: "Roboto_Regular",
     fontSize: 13,
@@ -105,7 +155,7 @@ export const styles = StyleSheet.create({
     marginLeft: 8,
     marginRight: 8,
   },
-  input:{
+  input: {
     fontFamily: "Roboto_Medium",
     fontSize: 16,
     lineHeight: 19,
@@ -127,9 +177,8 @@ export const styles = StyleSheet.create({
     width: 34,
     height: 34,
     borderRadius: 17,
-   
+
     justifyContent: "center",
     alignItems: "center",
-
-},
+  },
 });
