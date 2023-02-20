@@ -43,7 +43,7 @@ export default function CreatePostsScreen() {
     >
       <TouchableWithoutFeedback onPress={keyboardHide}>
         <View style={styles.container}>
-          <View style={styles.wrap}>
+          {/* <View style={styles.wrap}> */}
             <View>
               <View style={styles.wrapImg}>
                 {picture && (
@@ -129,7 +129,7 @@ export default function CreatePostsScreen() {
               </TouchableOpacity>
             </View>
           </View>
-        </View>
+        {/* </View> */}
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
@@ -139,12 +139,17 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#ffffff",
+
+    paddingTop: 32,
+    justifyContent: "space-between", 
+     paddingHorizontal: 16,
+     paddingBottom: 22,
   },
   wrap: {
     height: deviceHeight - 70,
-    paddingTop: 32,
-    justifyContent: "space-between",
-    paddingHorizontal: 16,
+  //   paddingTop: 32,
+  //  justifyContent: "space-between", 
+  //   paddingHorizontal: 16,
   },
   wrapImg: {
     height: 240,

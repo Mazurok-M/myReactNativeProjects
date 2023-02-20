@@ -11,6 +11,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import PostsScreen from "../Main/PostsScreen/PostsScreen";
 import CreatePostsScreen from "../Main/CreatePostsScreen/CreatePostsScreen";
 import ProfileScreen from "../Main/ProfileScreen/ProfileScreen";
+import CommentsScreen from "../CommentsScreen/CommentsScreen";
 
 function HeaderTitle({ navigation, title }) {
   return (
@@ -112,7 +113,7 @@ export default function Home({ navigation }) {
           };
         }}
         name="Create"
-        component={CreatePostsScreen}
+        component={CommentsScreen}
       />
       <MainTab.Screen
         options={{
@@ -131,6 +132,7 @@ export default function Home({ navigation }) {
         name="Profile"
         component={ProfileScreen}
       />
+     
     </MainTab.Navigator>
   );
 }

@@ -17,39 +17,40 @@ const Pictures = [
   {
     id: "1",
     title: "Ліс",
-    url:
-      "D:/Projects/myReactNativeProjects/assets/images/Picture/picture-1.jpg",
+    url: require("../../../assets/images/Picture/picture-1.jpg"),
+      
     coment: 1,
     location: "Ukrain",
   },
   {
     id: "2",
     title: "Закат",
-    url:
-      "D:/Projects/myReactNativeProjects/assets/images/Picture/picture-2.jpg",
+  
+    url: require("../../../assets/images/Picture/picture-1.jpg"),
+
     coment: 5,
-    location: "Ukrain",
+    location: "Ivano-Frankivs'k Region, Ukraine",
   },
   {
     id: "3",
     title: "Дім",
-    url:
-      "D:/Projects/myReactNativeProjects/assets/images/Picture/picture-3.jpg",
+    url: require("../../../assets/images/Picture/picture-1.jpg"),
+
     coment: 15,
     location: "Ukrain",
   },
 ];
 
 const Item = ({ item }) => {
-  console.log(item.url);
+
   return (
     <View>
       <Image
         style={styles.img}
-        source={{ uri: item.url }}
-        // source={{ uri: `../../../assets/images/Picture/${item.url}` }}
-      />
-
+        source={require("../../../assets/images/Picture/picture-2.jpg")}
+        />
+         {/* source={{ uri: item.url }}
+        */}
       <Text style={styles.nemeTitle}>{item.title}</Text>
       <View style={styles.comentWrap}>
         <View style={styles.coment}>
@@ -74,8 +75,7 @@ export default function PostsScreen() {
   const [pictures, setPictures] = useState(Pictures);
 
   return (
-    <View style={styles.container}>
-      <View>
+    <View style={styles.container}>    
         <View style={styles.profil}>
           <Image
             style={styles.avatar}
@@ -86,14 +86,13 @@ export default function PostsScreen() {
             <Text style={styles.email}>email@example.com</Text>
           </View>
         </View>
-        <SafeAreaView>
+        <SafeAreaView >
           <FlatList
             data={pictures}
             renderItem={({ item }) => <Item item={item} />}
             keyExtractor={(item) => item.id}
           />
-        </SafeAreaView>
-      </View>
+        </SafeAreaView>    
     </View>
   );
 }
