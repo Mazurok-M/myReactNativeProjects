@@ -6,14 +6,25 @@ import {
   TextInput,
   SafeAreaView,
   FlatList,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 
 import { AntDesign } from "@expo/vector-icons";
 
 import { StyleSheet } from "react-native";
 import { comments } from "../../Component/Comments";
+import { useState } from "react";
 
 export default function CommentsScreen() {
+  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+  const keyboardHide = () => {
+    setIsShowKeyboard(false);
+    Keyboard.dismiss();
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.wrapImg}>
@@ -22,56 +33,53 @@ export default function CommentsScreen() {
           source={require("../../assets/images/Picture/picture-3.jpg")}
         />
       </View>
-      <SafeAreaView style={{ flex: 1 }}>
-        <FlatList
-          data={comments}
-          renderItem={({ item }) => {
-            return item.name === "Natali Romanova" ? (
-              <View style={styles.wrap}>
-                <View style={styles.commentsWrapFirst}>
-                  <View style={styles.comment}>
-                    <Text style={styles.commentText}>{item.text}</Text>
-                    <View style={styles.commentDateWrap}>
-                      <Text style={styles.commentDate}> {item.date} </Text>
-                      <View style={styles.border}></View>
-                      <Text style={styles.commentDate}>{item.time}</Text>
-                    </View>
-                  </View>
-                </View>
-                <View style={styles.avatar}>
-                  <Image
-                    style={styles.avatar}
-                    source={require("../../assets/images/avatar.jpg")}
-                  />
-                </View>
-              </View>
-            ) : (
-              <View style={styles.wrap}>
-                <View style={styles.avatar}>
-                  <Image
-                    style={styles.avatar}
-                    source={require("../../assets/images/avatar-2.jpg")}
-                  />
-                </View>
-                <View style={styles.commentsWrap}>
-                  <View style={styles.comment}>
-                    <Text style={styles.commentText}>{item.text}</Text>
-                    <View style={styles.commentDateWrap}>
-                      <Text style={styles.commentDate}> {item.date} </Text>
-                      <View style={styles.border}></View>
-                      <Text style={styles.commentDate}>{item.time}</Text>
-                    </View>
+
+      <FlatList
+        data={comments}
+        renderItem={({ item }) => {
+          return item.name === "Natali Romanova" ? (
+            <View style={styles.wrap}>
+              <View style={styles.commentsWrapFirst}>
+                <View style={styles.comment}>
+                  <Text style={styles.commentText}>{item.text}</Text>
+                  <View style={styles.commentDateWrap}>
+                    <Text style={styles.commentDate}> {item.date} </Text>
+                    <View style={styles.border}></View>
+                    <Text style={styles.commentDate}>{item.time}</Text>
                   </View>
                 </View>
               </View>
-            );
-          }}
-          keyExtractor={(item) => item.id}
-          // ListFooterComponent={() => (
-          //   <TextInput placeholder="Коментувати..." style={styles.input} />
-          // )}
-        />
-      </SafeAreaView>
+              <View style={styles.avatar}>
+                <Image
+                  style={styles.avatar}
+                  source={require("../../assets/images/avatar.jpg")}
+                />
+              </View>
+            </View>
+          ) : (
+            <View style={styles.wrap}>
+              <View style={styles.avatar}>
+                <Image
+                  style={styles.avatar}
+                  source={require("../../assets/images/avatar-2.jpg")}
+                />
+              </View>
+              <View style={styles.commentsWrap}>
+                <View style={styles.comment}>
+                  <Text style={styles.commentText}>{item.text}</Text>
+                  <View style={styles.commentDateWrap}>
+                    <Text style={styles.commentDate}> {item.date} </Text>
+                    <View style={styles.border}></View>
+                    <Text style={styles.commentDate}>{item.time}</Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+          );
+        }}
+        keyExtractor={(item) => item.id}
+      />
+
       <View style={{ paddingTop: 5 }}>
         <TextInput placeholder="Коментувати..." style={styles.input} />
       </View>
@@ -96,11 +104,17 @@ export const styles = StyleSheet.create({
     height: 240,
     marginBottom: 32,
   },
-  img: { resizeMode: "cover", width: "100%", borderRadius: 8 },
+  img: {
+    resizeMode: "cover",
+    width: "100%",
+    borderRadius: 8,
+  },
+
   wrap: {
     flexDirection: "row",
     marginBottom: 24,
-    width: "100%",
+    justifyContent: "space-between",
+
   },
   avatar: {
     width: 28,
@@ -111,27 +125,24 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 16,
     backgroundColor: "rgba(0, 0, 0, 0.03)",
-    // marginLeft: 16,
-    // marginRight: 16,
+    marginRight: 16,
     borderTopLeftRadius: 6,
     borderBottomLeftRadius: 6,
     borderBottomRightRadius: 6,
+    width: 299,
   },
   commentsWrap: {
     paddingHorizontal: 16,
     paddingVertical: 16,
     backgroundColor: " rgba(0, 0, 0, 0.03)",
     marginLeft: 16,
-    marginRight: 16,
     borderTopRightRadius: 6,
     borderBottomLeftRadius: 6,
     borderBottomRightRadius: 6,
+    width: 299,
   },
   comment: {
-    // color: "#212121",
-    // fontFamily: "Roboto_Regular",
-    // fontSize: 13,
-    // lineHeight: 18,
+
   },
   commentText: {
     color: "#212121",
@@ -164,7 +175,6 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 11,
     paddingBottom: 10,
-    // paddingVertical: 16,
     borderColor: "#E8E8E8",
     borderRadius: 100,
     borderWidth: 1,

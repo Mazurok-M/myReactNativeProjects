@@ -48,7 +48,7 @@ export default function Home({ navigation }) {
           height: 71,
 
           backgroundColor: "#ffffff",
-          //   paddingBottom: 34,
+
           paddingTop: 9,
           paddingHorizontal: 60,
           borderTopColor: "#E8E8E8",
@@ -59,7 +59,6 @@ export default function Home({ navigation }) {
           borderBottomWidth: 1,
         },
         headerStatusBarHeight: 27,
-        // tabBarHideOnKeyboard: true,
       }}
     >
       <MainTab.Screen
@@ -113,7 +112,7 @@ export default function Home({ navigation }) {
           };
         }}
         name="Create"
-        component={CommentsScreen}
+        component={CreatePostsScreen}
       />
       <MainTab.Screen
         options={{
@@ -132,7 +131,6 @@ export default function Home({ navigation }) {
         name="Profile"
         component={ProfileScreen}
       />
-     
     </MainTab.Navigator>
   );
 }

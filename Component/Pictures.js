@@ -4,7 +4,7 @@ export const Pictures = [
     title: "Ліс",
     // url: "../assets/images/Picture/picture-1.jpg",
     url: require("../assets/images/Picture/picture-1.jpg"),
-    coment: 1,
+    coment: 0,
     like: 153,
     location: "Ukrain",
   },

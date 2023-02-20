@@ -43,93 +43,91 @@ export default function CreatePostsScreen() {
     >
       <TouchableWithoutFeedback onPress={keyboardHide}>
         <View style={styles.container}>
-          {/* <View style={styles.wrap}> */}
-            <View>
-              <View style={styles.wrapImg}>
-                {picture && (
-                  <Image
-                    style={styles.img}
-                    source={require("../../../assets/images/Picture/picture-1.jpg")}
-                  />
-                )}
-
-                <TouchableOpacity
-                  style={{
-                    ...styles.wrapBtnAdd,
-                    backgroundColor: picture
-                      ? "rgba(255, 255, 255, 0.3)"
-                      : "#F6F6F6",
-                  }}
-                  onPress={handleAddPicture}
-                >
-                  <FontAwesome
-                    name="camera"
-                    size={20}
-                    color={picture ? "#ffffff" : "#BDBDBD"}
-                  />
-                </TouchableOpacity>
-              </View>
-              {picture ? (
-                <Text style={styles.title}>Редагувати фото</Text>
-              ) : (
-                <Text style={styles.title}>Завантажте фото</Text>
+          <View>
+            <View style={styles.wrapImg}>
+              {picture && (
+                <Image
+                  style={styles.img}
+                  source={require("../../../assets/images/Picture/picture-1.jpg")}
+                />
               )}
 
-              <View>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Назва..."
-                  placeholderTextColor={"#BDBDBD"}
-                  onFocus={() => {
-                    setIsShowKeyboard(true);
-                  }}
+              <TouchableOpacity
+                style={{
+                  ...styles.wrapBtnAdd,
+                  backgroundColor: picture
+                    ? "rgba(255, 255, 255, 0.3)"
+                    : "#F6F6F6",
+                }}
+                onPress={handleAddPicture}
+              >
+                <FontAwesome
+                  name="camera"
+                  size={20}
+                  color={picture ? "#ffffff" : "#BDBDBD"}
                 />
-                <View>
-                  <TouchableOpacity style={styles.wrapMap}>
-                    <AntDesign
-                      style={styles.marker}
-                      name="enviromento"
-                      size={24}
-                      color="#BDBDBD"
-                    />
-                    <TextInput
-                      style={styles.inputMap}
-                      placeholder="Місцевість..."
-                      placeholderTextColor={"#BDBDBD"}
-                      onFocus={() => {
-                        setIsShowKeyboard(true);
-                      }}
-                    />
-                  </TouchableOpacity>
-                </View>
-                <TouchableOpacity
-                  style={{
-                    ...styles.btn,
-                    backgroundColor: picture ? "#FF6C00" : "#F6F6F6",
-                  }}
-                  activeOpacity={0.8}
-                >
-                  <Text
-                    style={{
-                      ...styles.btnTitle,
-                      color: picture ? "#ffffff" : "#BDBDBD",
+              </TouchableOpacity>
+            </View>
+            {picture ? (
+              <Text style={styles.title}>Редагувати фото</Text>
+            ) : (
+              <Text style={styles.title}>Завантажте фото</Text>
+            )}
+
+            <View>
+              <TextInput
+                style={styles.input}
+                placeholder="Назва..."
+                placeholderTextColor={"#BDBDBD"}
+                onFocus={() => {
+                  setIsShowKeyboard(true);
+                }}
+              />
+              <View>
+                <TouchableOpacity style={styles.wrapMap}>
+                  <AntDesign
+                    style={styles.marker}
+                    name="enviromento"
+                    size={24}
+                    color="#BDBDBD"
+                  />
+                  <TextInput
+                    style={styles.inputMap}
+                    placeholder="Місцевість..."
+                    placeholderTextColor={"#BDBDBD"}
+                    onFocus={() => {
+                      setIsShowKeyboard(true);
                     }}
-                  >
-                    Опублікувати
-                  </Text>
+                  />
                 </TouchableOpacity>
               </View>
-            </View>
-            <View style={{ alignItems: "center" }}>
               <TouchableOpacity
-                style={styles.wrapDelete}
-                onPress={handleDeletePicture}
+                style={{
+                  ...styles.btn,
+                  backgroundColor: picture ? "#FF6C00" : "#F6F6F6",
+                }}
+                activeOpacity={0.8}
               >
-                <Feather name="trash-2" size={24} color="#BDBDBD" />
+                <Text
+                  style={{
+                    ...styles.btnTitle,
+                    color: picture ? "#ffffff" : "#BDBDBD",
+                  }}
+                >
+                  Опублікувати
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
-        {/* </View> */}
+          <View style={{ alignItems: "center" }}>
+            <TouchableOpacity
+              style={styles.wrapDelete}
+              onPress={handleDeletePicture}
+            >
+              <Feather name="trash-2" size={24} color="#BDBDBD" />
+            </TouchableOpacity>
+          </View>
+        </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
@@ -141,15 +139,12 @@ export const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
 
     paddingTop: 32,
-    justifyContent: "space-between", 
-     paddingHorizontal: 16,
-     paddingBottom: 22,
+    justifyContent: "space-between",
+    paddingHorizontal: 16,
+    paddingBottom: 22,
   },
   wrap: {
     height: deviceHeight - 70,
-  //   paddingTop: 32,
-  //  justifyContent: "space-between", 
-  //   paddingHorizontal: 16,
   },
   wrapImg: {
     height: 240,
@@ -213,13 +208,11 @@ export const styles = StyleSheet.create({
     marginRight: 4,
   },
   btn: {
-    // backgroundColor: "#F6F6F6",
     borderRadius: 100,
     paddingTop: 16,
     paddingBottom: 16,
   },
   btnTitle: {
-    // color: "#BDBDBD",
     textAlign: "center",
   },
   wrapDelete: {

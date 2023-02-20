@@ -20,7 +20,7 @@ export const styles = StyleSheet.create({
     position: "relative",
     width: 120,
     height: 120,
-    backgroundColor: "#fff0ff",
+    backgroundColor: "#F6F6F6",
     marginTop: -60,
     borderRadius: 16,
     marginLeft: "auto",

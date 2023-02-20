@@ -19,7 +19,6 @@ export default function PostsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <SafeAreaView> */}
       <View style={styles.profil}>
         <Image
           style={styles.avatar}
@@ -36,7 +35,6 @@ export default function PostsScreen() {
         renderItem={({ item }) => <ItemPosts item={item} />}
         keyExtractor={(item) => item.id}
       />
-      {/* </SafeAreaView> */}
     </SafeAreaView>
   );
 }

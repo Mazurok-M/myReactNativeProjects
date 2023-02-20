@@ -1,26 +1,34 @@
 import { View, Text, Image, StyleSheet } from "react-native";
-import { Feather, AntDesign } from "@expo/vector-icons";
+import { Feather, AntDesign, FontAwesome, Fontisto } from "@expo/vector-icons";
 
 export default function ItemPosts({ item, profile }) {
+  const color = (number) => {
+    return number === 0 ? "#BDBDBD" : "#FF6C00";
+  };
+
   return (
     <View>
       <Image
         style={styles.img}
         // source={{ uri: item.url }}
-        // source={{ uri: "assets/images/Picture/picture-2.jpg" }}
         source={require("../assets/images/Picture/picture-2.jpg")}
       />
-      {/* source={{ uri: item.url }}
-       */}
+     
       <Text style={styles.nemeTitle}>{item.title}</Text>
       <View style={styles.comentWrap}>
         <View style={styles.coment}>
-          <Feather name="message-circle" size={24} color="#BDBDBD" />
+        
+          {item.coment === 0 ? (
+            <FontAwesome name="comment-o" size={24} color="#BDBDBD" />
+          ) : (
+            <FontAwesome name="comment" size={24} color="#FF6C00"  />
+          )}
+
           <Text style={{ marginLeft: 8, marginRight: 24 }}>{item.coment}</Text>
 
           {profile && (
             <>
-              <AntDesign name="like2" size={24} color="#BDBDBD" />
+              <AntDesign name="like2" size={24} color={color(item.like)} />
               <Text style={{ marginLeft: 6, marginRight: 24 }}>
                 {item.like}
               </Text>
