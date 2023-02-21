@@ -30,20 +30,4 @@ export const comments = [
     date: "09 июня, 2020",
     time: "09:14",
   },
-  //   {
-  //     id: "5",
-  //     name: "Natali Romanova",
-  //     text:
-  //       "A fast 50mm like f1.8 would help with the bokeh. I’ve been using primes as they tend to get a bit sharper images.",
-  //     date: "09 июня, 2020",
-  //     time: "09:14",
-  //   },
-  //   {
-  //     id: "6",
-  //     name: "Natali Romanova",
-  //     text:
-  //       "A fast 50mm like f1.8 would help with the bokeh. I’ve been using primes as they tend to get a bit sharper images.",
-  //     date: "09 июня, 2020",
-  //     time: "09:14",
-  //   },
 ];

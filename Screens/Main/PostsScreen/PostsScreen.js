@@ -1,72 +1,85 @@
-import {
-  View,
-  Text,
-  Image,
-  FlatList,
-  ScrollView,
-  SectionList,
-  SafeAreaView,
-} from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 
-import { StyleSheet } from "react-native";
+import { createStackNavigator } from "@react-navigation/stack";
 
-import { useState } from "react";
-import ItemPosts from "../../../Component/ItemPosts";
-import { Pictures } from "../../../Component/Pictures";
+import DefaultScreenPosts from "../../NestedScreens/DefaultScreenPosts";
+import CommentsScreen from "../../NestedScreens/CommentsScreen";
+import MapScreen from "../../NestedScreens/MapScreen";
 
-export default function PostsScreen() {
-  // const [pictures, setPictures] = useState(Pictures);
+import { Feather } from "@expo/vector-icons";
 
+const NestedScreen = createStackNavigator();
+
+function HeaderTitle({ navigation, title }) {
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.profil}>
-        <Image
-          style={styles.avatar}
-          source={require("../../../assets/images/avatar.jpg")}
-        />
-        <View>
-          <Text style={styles.name}>Natali Romanova</Text>
-          <Text style={styles.email}>email@example.com</Text>
-        </View>
-      </View>
-
-      <FlatList
-        data={Pictures}
-        renderItem={({ item }) => <ItemPosts item={item} />}
-        keyExtractor={(item) => item.id}
-      />
-    </SafeAreaView>
+    <View style={styles.container}>
+      <Text style={styles.titleHeader}>{title}</Text>
+    </View>
   );
 }
 
-export const styles = StyleSheet.create({
+function HeaderRight({ navigation }) {
+  return (
+    <View style={{ marginRight: 16 }}>
+      <Feather name="log-out" size={24} color="#BDBDBD" />
+    </View>
+  );
+}
+
+export default function PostsScreen({ navigation }) {
+  return (
+    <NestedScreen.Navigator>
+      <NestedScreen.Screen
+        name="DefaultPosts"
+        component={DefaultScreenPosts}
+        options={({ navigation }) => {
+          return {
+            headerTitle: () => (
+              <HeaderTitle navigation={navigation} title={"Публікації"} />
+            ),
+            headerTitleAlign: "center",
+            headerRight: () => <HeaderRight navigation={navigation} />,
+            headerLeft: false,
+          };
+        }}
+      />
+      <NestedScreen.Screen
+        name="Comments"
+        component={CommentsScreen}
+        options={({ navigation }) => {
+          return {
+            headerTitle: () => (
+              <HeaderTitle navigation={navigation} title={"Коментарії"} />
+            ),
+            headerTitleAlign: "center",
+          };
+        }}
+      />
+      <NestedScreen.Screen
+        name="Map"
+        component={MapScreen}
+        options={({ navigation }) => {
+          return {
+            headerTitle: () => (
+              <HeaderTitle navigation={navigation} title={"Карта"} />
+            ),
+            headerTitleAlign: "center",
+          };
+        }}
+      />
+    </NestedScreen.Navigator>
+  );
+}
+
+const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#ffffff",
-    paddingTop: 32,
-    paddingHorizontal: 16,
+    justifyContent: "center",
   },
-  profil: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 32,
-  },
-  avatar: {
-    width: 60,
-    height: 60,
-    borderRadius: 16,
-    marginRight: 8,
-  },
-  name: {
+
+  titleHeader: {
+    fontFamily: "Roboto_Medium",
+    fontSize: 17,
+    lineHeight: 22,
     color: "#212121",
-    fontFamily: "Roboto_Bold",
-    fontSize: 13,
-    lineHeight: 15,
-  },
-  email: {
-    fontFamily: "Roboto_Regular",
-    fontSize: 11,
-    lineHeight: 13,
-    color: "rgba(33, 33, 33, 0.8)",
   },
 });

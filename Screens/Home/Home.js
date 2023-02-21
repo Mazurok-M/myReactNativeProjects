@@ -11,7 +11,6 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import PostsScreen from "../Main/PostsScreen/PostsScreen";
 import CreatePostsScreen from "../Main/CreatePostsScreen/CreatePostsScreen";
 import ProfileScreen from "../Main/ProfileScreen/ProfileScreen";
-import CommentsScreen from "../CommentsScreen/CommentsScreen";
 
 function HeaderTitle({ navigation, title }) {
   return (
@@ -72,14 +71,10 @@ export default function Home({ navigation }) {
               borderRadius: 20,
               marginRight: 16,
             },
-            headerTitle: () => (
-              <HeaderTitle navigation={navigation} title={"Публікації"} />
-            ),
-            headerTitleAlign: "center",
-            headerRight: () => <HeaderRight navigation={navigation} />,
             tabBarActiveBackgroundColor: "#FF6C00",
             tabBarActiveTintColor: "#ffffff",
             tabBarInactiveTintColor: "#212121",
+            headerShown: false,
           };
         }}
         name="Post"

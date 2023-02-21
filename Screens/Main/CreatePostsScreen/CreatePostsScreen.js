@@ -9,31 +9,71 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   Platform,
+  StyleSheet,
 } from "react-native";
 
-import { StyleSheet } from "react-native";
+import { Camera, CameraType } from "expo-camera";
+import * as Location from "expo-location";
+import * as MediaLibrary from "expo-media-library";
 
 import { FontAwesome, Feather, AntDesign } from "@expo/vector-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 let deviceWidth = Dimensions.get("window").width;
-let deviceHeight = Dimensions.get("window").height;
 
-export default function CreatePostsScreen() {
+export default function CreatePostsScreen({ navigation }) {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-  const [picture, setPicture] = useState(false);
+  const [namePhoto, setNamePhoto] = useState("");
+  const [nameLocale, setNameLocale] = useState("");
+  const [camera, setCamera] = useState(null);
+  const [photo, setPhoto] = useState("");
+  const [cameraPermission, setCameraPermission] = useState();
+  const [mediaPermission, setMediaPermission] = useState();
+  const [locationPermission, setLocationPermission] = useState();
 
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
   };
 
-  const handleAddPicture = () => {
-    setPicture(true);
+  const handleDeletePicture = () => {
+    setPhoto(false);
   };
 
-  const handleDeletePicture = () => {
-    setPicture(false);
+  useEffect(() => {
+    (async () => {
+      const cameraStatus = await Camera.requestCameraPermissionsAsync();
+      const mediaStatus = await MediaLibrary.requestPermissionsAsync();
+      const locationStatus = await Location.requestForegroundPermissionsAsync();
+
+      setCameraPermission(cameraStatus.status);
+      setMediaPermission(mediaStatus.status);
+      setLocationPermission(locationStatus.status);
+    })();
+  }, []);
+
+  const takePhoto = async () => {
+    if (cameraPermission === "granted" && mediaPermission === "granted") {
+      const photo = await camera.takePictureAsync();
+
+      setPhoto(photo.uri);
+    }
+    return <Text>No access to camera</Text>;
+  };
+
+  const sendPhoto = async () => {
+    if (locationPermission === "granted") {
+      const { coords } = await Location.getCurrentPositionAsync();
+      console.log(namePhoto, nameLocale);
+      navigation.navigate("DefaultPosts", {
+        photo,
+        coords,
+        namePhoto,
+        nameLocale,
+      });
+      handleDeletePicture();
+    }
+    return <Text>No access to location</Text>;
   };
 
   return (
@@ -44,41 +84,56 @@ export default function CreatePostsScreen() {
       <TouchableWithoutFeedback onPress={keyboardHide}>
         <View style={styles.container}>
           <View>
-            <View style={styles.wrapImg}>
-              {picture && (
-                <Image
-                  style={styles.img}
-                  source={require("../../../assets/images/Picture/picture-1.jpg")}
-                />
-              )}
-
-              <TouchableOpacity
-                style={{
-                  ...styles.wrapBtnAdd,
-                  backgroundColor: picture
-                    ? "rgba(255, 255, 255, 0.3)"
-                    : "#F6F6F6",
-                }}
-                onPress={handleAddPicture}
-              >
-                <FontAwesome
-                  name="camera"
-                  size={20}
-                  color={picture ? "#ffffff" : "#BDBDBD"}
-                />
-              </TouchableOpacity>
-            </View>
-            {picture ? (
+            {photo ? (
+              <View style={styles.camera}>
+                <Image style={styles.img} source={{ uri: photo }} />
+                <TouchableOpacity
+                  style={{
+                    ...styles.wrapBtnAdd,
+                    backgroundColor: photo
+                      ? "rgba(255, 255, 255, 0.3)"
+                      : "#F6F6F6",
+                  }}
+                  onPress={handleDeletePicture}
+                >
+                  <FontAwesome
+                    name="camera"
+                    size={20}
+                    color={photo ? "#ffffff" : "#BDBDBD"}
+                  />
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <Camera style={styles.camera} ref={setCamera}>
+                <TouchableOpacity
+                  style={{
+                    ...styles.wrapBtnAdd,
+                    backgroundColor: photo
+                      ? "rgba(255, 255, 255, 0.3)"
+                      : "#F6F6F6",
+                  }}
+                  onPress={takePhoto}
+                >
+                  <FontAwesome
+                    name="camera"
+                    size={20}
+                    color={photo ? "#ffffff" : "#BDBDBD"}
+                  />
+                </TouchableOpacity>
+              </Camera>
+            )}
+            {photo ? (
               <Text style={styles.title}>Редагувати фото</Text>
             ) : (
               <Text style={styles.title}>Завантажте фото</Text>
             )}
-
             <View>
               <TextInput
                 style={styles.input}
                 placeholder="Назва..."
                 placeholderTextColor={"#BDBDBD"}
+                onChangeText={setNamePhoto}
+                value={namePhoto}
                 onFocus={() => {
                   setIsShowKeyboard(true);
                 }}
@@ -98,20 +153,23 @@ export default function CreatePostsScreen() {
                     onFocus={() => {
                       setIsShowKeyboard(true);
                     }}
+                    onChangeText={setNameLocale}
+                    value={nameLocale}
                   />
                 </TouchableOpacity>
               </View>
               <TouchableOpacity
                 style={{
                   ...styles.btn,
-                  backgroundColor: picture ? "#FF6C00" : "#F6F6F6",
+                  backgroundColor: photo ? "#FF6C00" : "#F6F6F6",
                 }}
                 activeOpacity={0.8}
+                onPress={sendPhoto}
               >
                 <Text
                   style={{
                     ...styles.btnTitle,
-                    color: picture ? "#ffffff" : "#BDBDBD",
+                    color: photo ? "#ffffff" : "#BDBDBD",
                   }}
                 >
                   Опублікувати
@@ -143,20 +201,23 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingBottom: 22,
   },
-  wrap: {
-    height: deviceHeight - 70,
-  },
-  wrapImg: {
+  camera: {
     height: 240,
-
-    borderRadius: 8,
     position: "relative",
     marginBottom: 8,
+    borderRadius: 8,
+  },
+  photoContainer: {
+    height: 240,
+    width: "100%",
+    borderRadius: 8,
+    position: "absolute",
   },
   img: {
     resizeMode: "cover",
     width: "100%",
     borderRadius: 8,
+    height: 240,
   },
   wrapBtnAdd: {
     position: "absolute",

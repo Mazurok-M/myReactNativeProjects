@@ -15,8 +15,9 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 
 import { StyleSheet } from "react-native";
-import { comments } from "../../Component/Comments";
+
 import { useState } from "react";
+import { comments } from "../../Component/Comments";
 
 export default function CommentsScreen() {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
@@ -33,7 +34,6 @@ export default function CommentsScreen() {
           source={require("../../assets/images/Picture/picture-3.jpg")}
         />
       </View>
-
       <FlatList
         data={comments}
         renderItem={({ item }) => {
@@ -79,7 +79,6 @@ export default function CommentsScreen() {
         }}
         keyExtractor={(item) => item.id}
       />
-
       <View style={{ paddingTop: 5 }}>
         <TextInput placeholder="Коментувати..." style={styles.input} />
       </View>
@@ -114,7 +113,6 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     marginBottom: 24,
     justifyContent: "space-between",
-
   },
   avatar: {
     width: 28,
@@ -141,9 +139,7 @@ export const styles = StyleSheet.create({
     borderBottomRightRadius: 6,
     width: 299,
   },
-  comment: {
-
-  },
+  comment: {},
   commentText: {
     color: "#212121",
     fontFamily: "Roboto_Regular",

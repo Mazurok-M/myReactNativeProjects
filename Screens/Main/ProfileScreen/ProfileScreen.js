@@ -16,7 +16,7 @@ import ItemPosts from "../../../Component/ItemPosts";
 import { Pictures } from "../../../Component/Pictures";
 import SvgComponent from "../../SvgComponent";
 
-export default function ProfileScreen() {
+export default function ProfileScreen({ route }) {
   const [avatarImg, setAvatarImg] = useState(false);
   const [avatarBtn, setAvatarBtn] = useState("#ff6c00");
 
@@ -29,6 +29,7 @@ export default function ProfileScreen() {
     }
   };
 
+  console.log(route);
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground
@@ -36,33 +37,32 @@ export default function ProfileScreen() {
         source={require("../../../assets/images/photo-bg.jpg")}
       >
         <View style={styles.wrap}>
-        <View style={styles.exitIcon}>
-              <Feather name="log-out" size={24} color="#BDBDBD" />
-            </View>
-            <View style={styles.avatar} >
-              {avatarImg && (
-                <Image
-                  style={styles.avatarImg}
-                  source={require("../../../assets/images/avatar.jpg")}
-                />
-              )}
+          <View style={styles.exitIcon}>
+            <Feather name="log-out" size={24} color="#BDBDBD" />
+          </View>
+          <View style={styles.avatar}>
+            {avatarImg && (
+              <Image
+                style={styles.avatarImg}
+                source={require("../../../assets/images/avatar.jpg")}
+              />
+            )}
 
-              <TouchableOpacity
-                style={{
-                  ...styles.avatarBtn,
-                  backgroundColor: avatarImg ? "#ffffff" : "transparent",
-                  transform: avatarImg
-                    ? [{ rotate: "45deg" }]
-                    : [{ rotate: "0deg" }],
-                }}
-                activeOpacity={0.8}
-                onPress={addAvatar}
-              >
-                <SvgComponent style={styles.avatarSvg} colorBtn={avatarBtn} />
-              </TouchableOpacity>
-            </View>
-           
-          
+            <TouchableOpacity
+              style={{
+                ...styles.avatarBtn,
+                backgroundColor: avatarImg ? "#ffffff" : "transparent",
+                transform: avatarImg
+                  ? [{ rotate: "45deg" }]
+                  : [{ rotate: "0deg" }],
+              }}
+              activeOpacity={0.8}
+              onPress={addAvatar}
+            >
+              <SvgComponent style={styles.avatarSvg} colorBtn={avatarBtn} />
+            </TouchableOpacity>
+          </View>
+
           <Text style={styles.uzerName}>Natali Romanova</Text>
           <FlatList
             data={Pictures}
@@ -92,7 +92,6 @@ export const styles = StyleSheet.create({
     borderTopRightRadius: 25,
     paddingHorizontal: 16,
     position: "relative",
-    
   },
   exitIcon: {
     marginTop: 22,
@@ -106,13 +105,10 @@ export const styles = StyleSheet.create({
     backgroundColor: "#F6F6F6",
 
     marginTop: -60,
-   
-    
-   
+
     position: "absolute",
     left: "50%",
-    transform: [{translateX: -50}],
-    
+    transform: [{ translateX: -50 }],
   },
   avatarImg: {
     borderRadius: 16,
@@ -134,4 +130,3 @@ export const styles = StyleSheet.create({
     marginBottom: 33,
   },
 });
-
