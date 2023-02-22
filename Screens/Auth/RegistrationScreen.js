@@ -16,6 +16,10 @@ import {
 import SvgComponent from "../SvgComponent";
 import { styles } from "./AuthStyles";
 
+import { useDispatch } from "react-redux";
+
+import { authSignUpUser } from "../../redux/auth/authOperations";
+
 const initialState = {
   login: "",
   email: "",
@@ -33,15 +37,23 @@ export default function RegistrationScreen({ navigation, ...props }) {
   const [avatarImg, setAvatarImg] = useState(false);
   const [avatarBtn, setAvatarBtn] = useState("#ff6c00");
 
+  const dispatch = useDispatch();
+
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
   };
 
-  const touchBtn = () => {
-    console.log(state);
+  // const touchBtn = () => {
+  //   console.log(state);
+  //   setState(initialState);
+  //   navigation.navigate("Home");
+  // };
+
+  const handleSubmit = () => {
+    dispatch(authSignUpUser(state));
     setState(initialState);
-    navigation.navigate("Home");
+    // navigation.navigate("Home");
   };
 
   const touchPassword = () => {
@@ -192,7 +204,7 @@ export default function RegistrationScreen({ navigation, ...props }) {
                   {!isShowKeyboard && (
                     <>
                       <TouchableOpacity style={styles.btn} activeOpacity={0.8}>
-                        <Text style={styles.btnTitle} onPress={touchBtn}>
+                        <Text style={styles.btnTitle} onPress={handleSubmit}>
                           Зареєструватися
                         </Text>
                       </TouchableOpacity>

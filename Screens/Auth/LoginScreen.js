@@ -12,6 +12,10 @@ import {
   TouchableOpacity,
 } from "react-native";
 
+import { useDispatch } from "react-redux";
+
+import { authSigInUser } from "../../redux/auth/authOperations";
+
 import { styles } from "./AuthStyles";
 
 const initialState = {
@@ -27,16 +31,23 @@ export default function LoginScreen({ navigation, ...props }) {
   const [emailBorderColor, setEmailBorderColor] = useState("#E8E8E8");
   const [passwordBorderColor, setPasswordBorderColor] = useState("#E8E8E8");
 
+  const dispatch = useDispatch();
+
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
   };
 
-  const touchBtn = () => {
-    console.log(state);
+  const handleSubmit = () => {
+    dispatch(authSigInUser(state));
     setState(initialState);
-    navigation.navigate("Home");
   };
+
+  // const touchBtn = () => {
+  //   console.log(state);
+  //   setState(initialState);
+  //   navigation.navigate("Home");
+  // };
 
   const touchPassword = () => {
     setPasswordShow(!passwordShow);
@@ -129,7 +140,7 @@ export default function LoginScreen({ navigation, ...props }) {
                   {!isShowKeyboard && (
                     <>
                       <TouchableOpacity style={styles.btn} activeOpacity={0.8}>
-                        <Text style={styles.btnTitle} onPress={touchBtn}>
+                        <Text style={styles.btnTitle} onPress={handleSubmit}>
                           Увійти
                         </Text>
                       </TouchableOpacity>

@@ -38,6 +38,8 @@ export default function CreatePostsScreen({ navigation }) {
 
   const handleDeletePicture = () => {
     setPhoto(false);
+    setNamePhoto("");
+    setNameLocale("");
   };
 
   useEffect(() => {
