@@ -8,7 +8,7 @@ import RegistrationScreen from "./Screens/Auth/RegistrationScreen";
 import Home from "./Screens/Home/Home";
 
 export const useRoute = (isAuth) => {
-  if (!isAuth)
+  if (!isAuth) {
     return (
       <AuthStack.Navigator initialRouteName="Login">
         <AuthStack.Screen
@@ -25,13 +25,25 @@ export const useRoute = (isAuth) => {
           name="Registration"
           component={RegistrationScreen}
         />
-        <AuthStack.Screen
+        {/* <AuthStack.Screen
           options={{
             headerShown: false,
           }}
           name="Home"
           component={Home}
-        />
+        /> */}
       </AuthStack.Navigator>
     );
+  }
+  return (
+    <AuthStack.Navigator initialRouteName="Login">
+      <AuthStack.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="Home"
+        component={Home}
+      />
+    </AuthStack.Navigator>
+  );
 };
