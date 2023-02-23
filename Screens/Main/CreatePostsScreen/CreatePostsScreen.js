@@ -18,6 +18,10 @@ import * as MediaLibrary from "expo-media-library";
 
 import { FontAwesome, Feather, AntDesign } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
+import { db, storage } from "../../../firebase/config";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { collection, addDoc } from "firebase/firestore";
+import { useSelector } from "react-redux";
 
 let deviceWidth = Dimensions.get("window").width;
 
@@ -25,11 +29,14 @@ export default function CreatePostsScreen({ navigation }) {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [namePhoto, setNamePhoto] = useState("");
   const [nameLocale, setNameLocale] = useState("");
+  const [coordsLocale, setCoordsLocale] = useState("");
   const [camera, setCamera] = useState(null);
   const [photo, setPhoto] = useState("");
   const [cameraPermission, setCameraPermission] = useState();
   const [mediaPermission, setMediaPermission] = useState();
   const [locationPermission, setLocationPermission] = useState();
+
+  const { userId, login } = useSelector((state) => state.auth);
 
   const keyboardHide = () => {
     setIsShowKeyboard(false);
@@ -55,27 +62,54 @@ export default function CreatePostsScreen({ navigation }) {
   }, []);
 
   const takePhoto = async () => {
-    if (cameraPermission === "granted" && mediaPermission === "granted") {
+    if (
+      cameraPermission === "granted" &&
+      mediaPermission === "granted" &&
+      locationPermission === "granted"
+    ) {
       const photo = await camera.takePictureAsync();
-
+      const { coords } = await Location.getCurrentPositionAsync();
+      setCoordsLocale(coords);
       setPhoto(photo.uri);
     }
-    return <Text>No access to camera</Text>;
+    return <Text>No access to camera or location</Text>;
   };
 
   const sendPhoto = async () => {
-    if (locationPermission === "granted") {
-      const { coords } = await Location.getCurrentPositionAsync();
-      console.log(namePhoto, nameLocale);
-      navigation.navigate("DefaultPosts", {
-        photo,
-        coords,
-        namePhoto,
-        nameLocale,
-      });
-      handleDeletePicture();
-    }
-    return <Text>No access to location</Text>;
+    await uploadPostToServer();
+    navigation.navigate("DefaultPosts");
+
+    handleDeletePicture();
+  };
+
+  const uploadPostToServer = async () => {
+    const photo = await uploadPhotoToServer();
+
+    const createPost = await addDoc(collection(db, "posts"), {
+      photo,
+      namePhoto,
+      nameLocale,
+      coordsLocale,
+      userId,
+      login,
+    });
+  };
+
+  const uploadPhotoToServer = async () => {
+    const respons = await fetch(photo);
+    const file = await respons.blob();
+
+    const uniquePostId = Date.now().toString();
+
+    const data = await ref(storage, `postImages/${uniquePostId}`);
+
+    await uploadBytes(data, file);
+
+    const processedPhoto = await getDownloadURL(
+      ref(storage, `postImages/${uniquePostId}`)
+    );
+
+    return processedPhoto;
   };
 
   return (

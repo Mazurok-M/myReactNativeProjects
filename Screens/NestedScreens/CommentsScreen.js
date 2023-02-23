@@ -16,10 +16,40 @@ import { AntDesign } from "@expo/vector-icons";
 
 import { StyleSheet } from "react-native";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { comments } from "../../Component/Comments";
+import { useSelector } from "react-redux";
+import { addDoc, collection, doc, onSnapshot } from "firebase/firestore";
+import { db } from "../../firebase/config";
 
-export default function CommentsScreen() {
+export default function CommentsScreen({ route }) {
+  const postId = route.params.postId;
+  const [comment, setComment] = useState("");
+  const [allComment, setAllComment] = useState([]);
+  const { login } = useSelector((state) => state.auth);
+
+  const createComents = async () => {
+    await addDoc(collection(doc(db, "posts", postId), "comments"), {
+      comment,
+      login,
+    });
+
+    setComment("");
+  };
+
+  useEffect(() => {
+    getAllComments();
+  }, []);
+
+  const getAllComments = async () => {
+    await onSnapshot(
+      collection(doc(db, "posts", postId), "comments"),
+      (data) => {
+        setAllComment(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      }
+    );
+  };
+
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const keyboardHide = () => {
     setIsShowKeyboard(false);
@@ -29,13 +59,10 @@ export default function CommentsScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.wrapImg}>
-        <Image
-          style={styles.img}
-          source={require("../../assets/images/Picture/picture-3.jpg")}
-        />
+        <Image style={styles.img} source={{ uri: route.params.url }} />
       </View>
       <FlatList
-        data={comments}
+        data={allComment}
         renderItem={({ item }) => {
           return item.name === "Natali Romanova" ? (
             <View style={styles.wrap}>
@@ -59,18 +86,19 @@ export default function CommentsScreen() {
           ) : (
             <View style={styles.wrap}>
               <View style={styles.avatar}>
-                <Image
+                <Text>{item.login}</Text>
+                {/* <Image
                   style={styles.avatar}
                   source={require("../../assets/images/avatar-2.jpg")}
-                />
+                /> */}
               </View>
               <View style={styles.commentsWrap}>
                 <View style={styles.comment}>
-                  <Text style={styles.commentText}>{item.text}</Text>
+                  <Text style={styles.commentText}>{item.comment}</Text>
                   <View style={styles.commentDateWrap}>
-                    <Text style={styles.commentDate}> {item.date} </Text>
+                    <Text style={styles.commentDate}> data </Text>
                     <View style={styles.border}></View>
-                    <Text style={styles.commentDate}>{item.time}</Text>
+                    <Text style={styles.commentDate}>time</Text>
                   </View>
                 </View>
               </View>
@@ -79,12 +107,17 @@ export default function CommentsScreen() {
         }}
         keyExtractor={(item) => item.id}
       />
-      <View style={{ paddingTop: 5 }}>
-        <TextInput placeholder="Коментувати..." style={styles.input} />
+      <View style={styles.wrapInput}>
+        <TextInput
+          placeholder="Коментувати..."
+          style={styles.input}
+          onChangeText={setComment}
+          value={comment}
+        />
+        <TouchableOpacity style={styles.btn} onPress={createComents}>
+          <AntDesign name="arrowup" size={14} color="#ffffff" />
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.btn}>
-        <AntDesign name="arrowup" size={14} color="#ffffff" />
-      </TouchableOpacity>
     </SafeAreaView>
   );
 }
@@ -97,7 +130,6 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingBottom: 16,
     justifyContent: "space-between",
-    position: "relative",
   },
   wrapImg: {
     height: 240,
@@ -106,6 +138,7 @@ export const styles = StyleSheet.create({
   img: {
     resizeMode: "cover",
     width: "100%",
+    height: 240,
     borderRadius: 8,
   },
 
@@ -162,23 +195,29 @@ export const styles = StyleSheet.create({
     marginLeft: 8,
     marginRight: 8,
   },
+  wrapInput: {
+    flexDirection: "row",
+
+    backgroundColor: "#F6F6F6",
+    paddingLeft: 16,
+    paddingRight: 8,
+
+    paddingTop: 8,
+    paddingBottom: 8,
+    borderColor: "#E8E8E8",
+    borderRadius: 100,
+    borderWidth: 1,
+  },
   input: {
     fontFamily: "Roboto_Medium",
     fontSize: 16,
     lineHeight: 19,
     color: "#212121",
-    backgroundColor: "#F6F6F6",
-    paddingHorizontal: 16,
-    paddingTop: 11,
-    paddingBottom: 10,
-    borderColor: "#E8E8E8",
-    borderRadius: 100,
-    borderWidth: 1,
+
+    flex: 4,
   },
+
   btn: {
-    position: "absolute",
-    bottom: 24,
-    right: 24,
     backgroundColor: "#FF6C00",
     width: 34,
     height: 34,

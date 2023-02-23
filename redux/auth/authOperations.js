@@ -4,6 +4,7 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   updateProfile,
+  signOut,
 } from "firebase/auth";
 
 // import { app } from "../../firebase/config";
@@ -11,7 +12,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { auth } from "../../firebase/config";
 
 import { authSlice } from "./authReduser";
-import { async } from "@firebase/util";
+
+const { updateUserProfile, authStateChange, authSignOut } = authSlice.actions;
 
 export const authSignUpUser = ({ login, email, password }) => async (
   dispatch,
@@ -20,14 +22,17 @@ export const authSignUpUser = ({ login, email, password }) => async (
   try {
     await createUserWithEmailAndPassword(auth, email, password);
 
-    await updateProfile(auth.currentUser, { displayName: login });
+    await updateProfile(auth.currentUser, {
+      displayName: login,
+    });
 
-    const { displayName, uid } = auth.currentUser;
+    const { displayName, uid, email } = auth.currentUser;
 
     dispatch(
-      authSlice.actions.updateUserProfile({
+      updateUserProfile({
         userId: uid,
         login: displayName,
+        userEmail: email,
       })
     );
   } catch (error) {
@@ -48,8 +53,23 @@ export const authSigInUser = ({ email, password }) => async (
   }
 };
 
-const authSignOutUser = () => (dispatch, getSatte) => {};
+export const authSignOutUser = () => async (dispatch, getSatte) => {
+  await signOut(auth);
+
+  dispatch(authSignOut());
+};
 
 export const authStateChangeUser = () => async (dispatch, getSatte) => {
-  await onAuthStateChanged(auth, (user) => setUser(user));
+  await onAuthStateChanged(auth, (user) => {
+    if (user) {
+      dispatch(
+        updateUserProfile({
+          userId: user.uid,
+          login: user.displayName,
+          userEmail: user.email,
+        })
+      );
+      dispatch(authStateChange({ stateChange: true }));
+    }
+  });
 };

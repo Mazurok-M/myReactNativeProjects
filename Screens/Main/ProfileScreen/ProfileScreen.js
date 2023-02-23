@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -15,10 +15,32 @@ import { StyleSheet } from "react-native";
 import ItemPosts from "../../../Component/ItemPosts";
 import { Pictures } from "../../../Component/Pictures";
 import SvgComponent from "../../SvgComponent";
+import { useDispatch, useSelector } from "react-redux";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { db } from "../../../firebase/config";
 
 export default function ProfileScreen({ route }) {
   const [avatarImg, setAvatarImg] = useState(false);
   const [avatarBtn, setAvatarBtn] = useState("#ff6c00");
+  const [userPosts, setUserPosts] = useState("#ff6c00");
+  const dispatch = useDispatch();
+  const { userId, login } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    getUserPosts();
+  }, []);
+
+  const getUserPosts = async () => {
+    // collection(db, "posts")
+    // query(collection(db, "posts"), where("userId", "==", userId));
+
+    onSnapshot(
+      query(collection(db, "posts"), where("userId", "==", userId)),
+      (data) => {
+        setUserPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      }
+    );
+  };
 
   const addAvatar = () => {
     setAvatarImg(!avatarImg);
@@ -29,7 +51,6 @@ export default function ProfileScreen({ route }) {
     }
   };
 
-  console.log(route);
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground
@@ -63,9 +84,9 @@ export default function ProfileScreen({ route }) {
             </TouchableOpacity>
           </View>
 
-          <Text style={styles.uzerName}>Natali Romanova</Text>
+          <Text style={styles.uzerName}>{login}</Text>
           <FlatList
-            data={Pictures}
+            data={userPosts}
             renderItem={({ item }) => <ItemPosts item={item} profile />}
             keyExtractor={(item) => item.id}
           />

@@ -11,18 +11,19 @@ import { auth } from "../firebase/config";
 
 import { useRoute } from "../router";
 import { View } from "react-native";
-import { onAuthStateChanged } from "firebase/auth";
+
+import { authStateChangeUser } from "../redux/auth/authOperations";
 
 export default function Main() {
-  const [user, setUser] = useState(null);
+  const { stateChange } = useSelector((state) => state.auth);
 
-  const state = useSelector((state) => state);
+  const dispatch = useDispatch();
 
-  onAuthStateChanged(auth, (user) => setUser(user));
+  useEffect(() => {
+    dispatch(authStateChangeUser());
+  }, [stateChange]);
 
-  const routing = useRoute(user);
-
-  useEffect(() => {}, []);
+  const routing = useRoute(stateChange);
 
   const [fontsLoaded] = useFonts({
     Roboto_Regular: require("../assets/fonts/Roboto/Roboto-Regular.ttf"),

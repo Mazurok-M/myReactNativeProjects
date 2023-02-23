@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 import { createStackNavigator } from "@react-navigation/stack";
 
@@ -7,6 +7,10 @@ import CommentsScreen from "../../NestedScreens/CommentsScreen";
 import MapScreen from "../../NestedScreens/MapScreen";
 
 import { Feather } from "@expo/vector-icons";
+import { authSignOutUser } from "../../../redux/auth/authOperations";
+import { signOut } from "firebase/auth";
+import { auth } from "../../../firebase/config";
+import { useDispatch } from "react-redux";
 
 const NestedScreen = createStackNavigator();
 
@@ -19,10 +23,18 @@ function HeaderTitle({ navigation, title }) {
 }
 
 function HeaderRight({ navigation }) {
+  const dispatch = useDispatch();
+
+  const signOut = () => {
+    dispatch(authSignOutUser());
+  };
+
   return (
-    <View style={{ marginRight: 16 }}>
-      <Feather name="log-out" size={24} color="#BDBDBD" />
-    </View>
+    <TouchableOpacity onPress={signOut}>
+      <View style={{ marginRight: 16 }}>
+        <Feather name="log-out" size={24} color="#BDBDBD" />
+      </View>
+    </TouchableOpacity>
   );
 }
 

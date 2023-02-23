@@ -3,16 +3,24 @@ import { View, Text, Image, FlatList, SafeAreaView } from "react-native";
 import { StyleSheet } from "react-native";
 
 import { useEffect, useState } from "react";
+import { onSnapshot, collection } from "firebase/firestore";
 import ItemPosts from "../../Component/ItemPosts";
+import { db } from "../../firebase/config";
+import { useSelector } from "react-redux";
 
 export default function DefaultScreenPosts({ route, navigation }) {
   const [posts, setPosts] = useState([]);
+  const { login, userEmail } = useSelector((state) => state.auth);
+
+  const getAllPost = async () => {
+    await onSnapshot(collection(db, "posts"), (data) => {
+      setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    });
+  };
 
   useEffect(() => {
-    if (route.params) {
-      setPosts((prevState) => [...prevState, route.params]);
-    }
-  }, [route.params]);
+    getAllPost();
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -22,8 +30,8 @@ export default function DefaultScreenPosts({ route, navigation }) {
           source={require("../../assets/images/avatar.jpg")}
         />
         <View>
-          <Text style={styles.name}>Natali Romanova</Text>
-          <Text style={styles.email}>email@example.com</Text>
+          <Text style={styles.name}>{login}</Text>
+          <Text style={styles.email}>{userEmail}</Text>
         </View>
       </View>
 

@@ -2,8 +2,8 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 
 export default function ItemPosts({ item, profile, navigation }) {
-  const latitude = item.coords.latitude;
-  const longitude = item.coords.longitude;
+  const latitude = item.coordsLocale?.latitude;
+  const longitude = item.coordsLocale?.longitude;
   const title = item.nameLocale;
 
   const color = (number) => {
@@ -19,7 +19,12 @@ export default function ItemPosts({ item, profile, navigation }) {
         <View style={styles.coment}>
           <TouchableOpacity
             style={{ flexDirection: "row", alignItems: "center" }}
-            onPress={() => navigation.navigate("Comments")}
+            onPress={() =>
+              navigation.navigate("Comments", {
+                postId: item.id,
+                url: item.photo,
+              })
+            }
           >
             <FontAwesome name="comment" size={24} color="#FF6C00" />
 
