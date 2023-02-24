@@ -19,21 +19,31 @@ import { StyleSheet } from "react-native";
 import { useEffect, useState } from "react";
 import { comments } from "../../Component/Comments";
 import { useSelector } from "react-redux";
-import { addDoc, collection, doc, onSnapshot } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  onSnapshot,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "../../firebase/config";
 
 export default function CommentsScreen({ route }) {
   const postId = route.params.postId;
   const [comment, setComment] = useState("");
   const [allComment, setAllComment] = useState([]);
-  const { login } = useSelector((state) => state.auth);
+  const { login, userId } = useSelector((state) => state.auth);
 
   const createComents = async () => {
     await addDoc(collection(doc(db, "posts", postId), "comments"), {
       comment,
       login,
+      date: Date.now(),
+      userId,
     });
-
+    await updateDoc(doc(db, "posts", postId), {
+      totalComment: allComment.length + 1,
+    });
     setComment("");
   };
 
@@ -45,7 +55,21 @@ export default function CommentsScreen({ route }) {
     await onSnapshot(
       collection(doc(db, "posts", postId), "comments"),
       (data) => {
-        setAllComment(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+        setAllComment(
+          data.docs.map((doc) => ({
+            ...doc.data(),
+            id: doc.id,
+            dateComment: new Date(doc.data().date).toLocaleString("ua", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            }),
+            time: new Date(doc.data().date).toLocaleString("ua", {
+              hour: "numeric",
+              minute: "numeric",
+            }),
+          }))
+        );
       }
     );
   };
@@ -62,15 +86,15 @@ export default function CommentsScreen({ route }) {
         <Image style={styles.img} source={{ uri: route.params.url }} />
       </View>
       <FlatList
-        data={allComment}
+        data={allComment.sort((a, b) => (a.date > b.date ? 1 : -1))}
         renderItem={({ item }) => {
-          return item.name === "Natali Romanova" ? (
+          return item.userId === userId ? (
             <View style={styles.wrap}>
               <View style={styles.commentsWrapFirst}>
                 <View style={styles.comment}>
-                  <Text style={styles.commentText}>{item.text}</Text>
+                  <Text style={styles.commentText}>{item.comment}</Text>
                   <View style={styles.commentDateWrap}>
-                    <Text style={styles.commentDate}> {item.date} </Text>
+                    <Text style={styles.commentDate}>{item.dateComment}</Text>
                     <View style={styles.border}></View>
                     <Text style={styles.commentDate}>{item.time}</Text>
                   </View>
@@ -96,9 +120,9 @@ export default function CommentsScreen({ route }) {
                 <View style={styles.comment}>
                   <Text style={styles.commentText}>{item.comment}</Text>
                   <View style={styles.commentDateWrap}>
-                    <Text style={styles.commentDate}> data </Text>
+                    <Text style={styles.commentDate}>{item.dateComment}</Text>
                     <View style={styles.border}></View>
-                    <Text style={styles.commentDate}>time</Text>
+                    <Text style={styles.commentDate}>{item.time}</Text>
                   </View>
                 </View>
               </View>

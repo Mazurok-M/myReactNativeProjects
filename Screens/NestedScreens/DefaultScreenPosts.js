@@ -3,18 +3,24 @@ import { View, Text, Image, FlatList, SafeAreaView } from "react-native";
 import { StyleSheet } from "react-native";
 
 import { useEffect, useState } from "react";
-import { onSnapshot, collection } from "firebase/firestore";
+import { onSnapshot, collection, doc } from "firebase/firestore";
 import ItemPosts from "../../Component/ItemPosts";
 import { db } from "../../firebase/config";
 import { useSelector } from "react-redux";
 
 export default function DefaultScreenPosts({ route, navigation }) {
   const [posts, setPosts] = useState([]);
+
   const { login, userEmail } = useSelector((state) => state.auth);
 
   const getAllPost = async () => {
     await onSnapshot(collection(db, "posts"), (data) => {
-      setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      setPosts(
+        data.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }))
+      );
     });
   };
 
@@ -36,7 +42,7 @@ export default function DefaultScreenPosts({ route, navigation }) {
       </View>
 
       <FlatList
-        data={posts}
+        data={posts.sort((a, b) => (a.date < b.date ? 1 : -1))}
         renderItem={({ item }) => (
           <ItemPosts item={item} navigation={navigation} />
         )}

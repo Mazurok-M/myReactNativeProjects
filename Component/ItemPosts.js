@@ -26,15 +26,15 @@ export default function ItemPosts({ item, profile, navigation }) {
               })
             }
           >
-            <FontAwesome name="comment" size={24} color="#FF6C00" />
+            {item.totalComment === 0 ? (
+              <FontAwesome name="comment-o" size={24} color="#BDBDBD" />
+            ) : (
+              <FontAwesome name="comment" size={24} color="#FF6C00" />
+            )}
 
-            {/* {item.coment === 0 ? (
-            <FontAwesome name="comment-o" size={24} color="#BDBDBD" />
-          ) : (
-            <FontAwesome name="comment" size={24} color="#FF6C00"  />
-          )} */}
-
-            <Text style={{ marginLeft: 8, marginRight: 24 }}>5</Text>
+            <Text style={{ marginLeft: 8, marginRight: 24 }}>
+              {item.totalComment}
+            </Text>
           </TouchableOpacity>
           {profile && (
             <>

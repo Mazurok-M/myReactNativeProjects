@@ -18,8 +18,9 @@ import SvgComponent from "../../SvgComponent";
 import { useDispatch, useSelector } from "react-redux";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "../../../firebase/config";
+import { authSignOutUser } from "../../../redux/auth/authOperations";
 
-export default function ProfileScreen({ route }) {
+export default function ProfileScreen({ route, navigation }) {
   const [avatarImg, setAvatarImg] = useState(false);
   const [avatarBtn, setAvatarBtn] = useState("#ff6c00");
   const [userPosts, setUserPosts] = useState("#ff6c00");
@@ -30,10 +31,11 @@ export default function ProfileScreen({ route }) {
     getUserPosts();
   }, []);
 
-  const getUserPosts = async () => {
-    // collection(db, "posts")
-    // query(collection(db, "posts"), where("userId", "==", userId));
+  const signOut = () => {
+    dispatch(authSignOutUser());
+  };
 
+  const getUserPosts = async () => {
     onSnapshot(
       query(collection(db, "posts"), where("userId", "==", userId)),
       (data) => {
@@ -58,9 +60,11 @@ export default function ProfileScreen({ route }) {
         source={require("../../../assets/images/photo-bg.jpg")}
       >
         <View style={styles.wrap}>
-          <View style={styles.exitIcon}>
-            <Feather name="log-out" size={24} color="#BDBDBD" />
-          </View>
+          <TouchableOpacity onPress={signOut}>
+            <View style={styles.exitIcon}>
+              <Feather name="log-out" size={24} color="#BDBDBD" />
+            </View>
+          </TouchableOpacity>
           <View style={styles.avatar}>
             {avatarImg && (
               <Image
@@ -86,9 +90,11 @@ export default function ProfileScreen({ route }) {
 
           <Text style={styles.uzerName}>{login}</Text>
           <FlatList
-            data={userPosts}
-            renderItem={({ item }) => <ItemPosts item={item} profile />}
-            keyExtractor={(item) => item.id}
+            data={userPosts.sort((a, b) => (a.date < b.date ? 1 : -1))}
+            renderItem={({ item }) => (
+              <ItemPosts item={item} navigation={navigation} profile />
+            )}
+            keyExtractor={(item, index) => index.toString()}
           />
         </View>
       </ImageBackground>

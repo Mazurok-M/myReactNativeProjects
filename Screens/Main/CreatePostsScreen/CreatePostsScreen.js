@@ -92,6 +92,8 @@ export default function CreatePostsScreen({ navigation }) {
       coordsLocale,
       userId,
       login,
+      date: Date.now(),
+      totalComment: 0,
     });
   };
 
