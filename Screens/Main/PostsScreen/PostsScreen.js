@@ -8,8 +8,7 @@ import MapScreen from "../../NestedScreens/MapScreen";
 
 import { Feather } from "@expo/vector-icons";
 import { authSignOutUser } from "../../../redux/auth/authOperations";
-import { signOut } from "firebase/auth";
-import { auth } from "../../../firebase/config";
+
 import { useDispatch } from "react-redux";
 
 const NestedScreen = createStackNavigator();

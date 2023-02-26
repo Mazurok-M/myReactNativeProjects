@@ -19,11 +19,13 @@ import { styles } from "./AuthStyles";
 import { useDispatch } from "react-redux";
 
 import { authSignUpUser } from "../../redux/auth/authOperations";
+import Avatar from "../../Component/Avatar";
 
 const initialState = {
   login: "",
   email: "",
   password: "",
+  avatar: "",
 };
 
 export default function RegistrationScreen({ navigation, ...props }) {
@@ -34,7 +36,7 @@ export default function RegistrationScreen({ navigation, ...props }) {
   const [loginBorderColor, setLoginBorderColor] = useState("#E8E8E8");
   const [emailBorderColor, setEmailBorderColor] = useState("#E8E8E8");
   const [passwordBorderColor, setPasswordBorderColor] = useState("#E8E8E8");
-  const [avatarImg, setAvatarImg] = useState(false);
+  const [imageAvatar, setImageAvatar] = useState("");
   const [avatarBtn, setAvatarBtn] = useState("#ff6c00");
 
   const dispatch = useDispatch();
@@ -44,16 +46,9 @@ export default function RegistrationScreen({ navigation, ...props }) {
     Keyboard.dismiss();
   };
 
-  // const touchBtn = () => {
-  //   console.log(state);
-  //   setState(initialState);
-  //   navigation.navigate("Home");
-  // };
-
   const handleSubmit = () => {
-    dispatch(authSignUpUser(state));
+    dispatch(authSignUpUser({ ...state, avatar: imageAvatar }));
     setState(initialState);
-    // navigation.navigate("Home");
   };
 
   const touchPassword = () => {
@@ -75,15 +70,6 @@ export default function RegistrationScreen({ navigation, ...props }) {
     nameState("#E8E8E8");
   };
 
-  const addAvatar = () => {
-    setAvatarImg(!avatarImg);
-    if (avatarImg) {
-      setAvatarBtn("#FF6C00");
-    } else {
-      setAvatarBtn("#E8E8E8");
-    }
-  };
-
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <View style={styles.container}>
@@ -98,35 +84,14 @@ export default function RegistrationScreen({ navigation, ...props }) {
               <View
                 style={{
                   ...styles.wrap,
+                  paddingTop: 92,
                   paddingBottom: isShowKeyboard ? 16 : 78,
                 }}
               >
-                <View style={styles.avatar}>
-                  {avatarImg && (
-                    <Image
-                      style={styles.avatarImg}
-                      source={require("../../assets/images/avatar.jpg")}
-                    />
-                  )}
-
-                  <TouchableOpacity
-                    style={{
-                      ...styles.avatarBtn,
-                      backgroundColor: avatarImg ? "#ffffff" : "transparent",
-                      transform: avatarImg
-                        ? [{ rotate: "45deg" }]
-                        : [{ rotate: "0deg" }],
-                    }}
-                    activeOpacity={0.8}
-                    onPress={addAvatar}
-                  >
-                    <SvgComponent
-                      style={styles.avatarSvg}
-                      colorBtn={avatarBtn}
-                    />
-                  </TouchableOpacity>
-                </View>
-
+                <Avatar
+                  imageAvatar={imageAvatar}
+                  setImageAvatar={setImageAvatar}
+                />
                 <View style={styles.form}>
                   <Text style={styles.formTitle}>Реєстрація</Text>
 

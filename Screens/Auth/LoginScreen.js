@@ -43,12 +43,6 @@ export default function LoginScreen({ navigation, ...props }) {
     setState(initialState);
   };
 
-  // const touchBtn = () => {
-  //   console.log(state);
-  //   setState(initialState);
-  //   navigation.navigate("Home");
-  // };
-
   const touchPassword = () => {
     setPasswordShow(!passwordShow);
     if (passwordShow) {
@@ -82,6 +76,7 @@ export default function LoginScreen({ navigation, ...props }) {
               <View
                 style={{
                   ...styles.wrap,
+                  paddingTop: 32,
                   paddingBottom: isShowKeyboard ? 16 : 78,
                 }}
               >

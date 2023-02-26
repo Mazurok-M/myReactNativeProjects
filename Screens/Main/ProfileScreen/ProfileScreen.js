@@ -7,25 +7,26 @@ import {
   SafeAreaView,
   FlatList,
   TouchableOpacity,
+  StyleSheet,
 } from "react-native";
 
 import { Feather } from "@expo/vector-icons";
 
-import { StyleSheet } from "react-native";
 import ItemPosts from "../../../Component/ItemPosts";
-import { Pictures } from "../../../Component/Pictures";
-import SvgComponent from "../../SvgComponent";
 import { useDispatch, useSelector } from "react-redux";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "../../../firebase/config";
 import { authSignOutUser } from "../../../redux/auth/authOperations";
+import Avatar from "../../../Component/Avatar";
 
 export default function ProfileScreen({ route, navigation }) {
-  const [avatarImg, setAvatarImg] = useState(false);
-  const [avatarBtn, setAvatarBtn] = useState("#ff6c00");
-  const [userPosts, setUserPosts] = useState("#ff6c00");
+  const [userPosts, setUserPosts] = useState([]);
   const dispatch = useDispatch();
-  const { userId, login } = useSelector((state) => state.auth);
+
+  const { userId, login, avatar } = useSelector((state) => state.auth);
+  const [imageAvatar, setImageAvatar] = useState(avatar);
+
+  const state = useSelector((state) => state.auth);
 
   useEffect(() => {
     getUserPosts();
@@ -44,15 +45,6 @@ export default function ProfileScreen({ route, navigation }) {
     );
   };
 
-  const addAvatar = () => {
-    setAvatarImg(!avatarImg);
-    if (avatarImg) {
-      setAvatarBtn("#FF6C00");
-    } else {
-      setAvatarBtn("#E8E8E8");
-    }
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground
@@ -60,33 +52,13 @@ export default function ProfileScreen({ route, navigation }) {
         source={require("../../../assets/images/photo-bg.jpg")}
       >
         <View style={styles.wrap}>
-          <TouchableOpacity onPress={signOut}>
-            <View style={styles.exitIcon}>
+          <View style={styles.exitIcon}>
+            <TouchableOpacity onPress={signOut}>
               <Feather name="log-out" size={24} color="#BDBDBD" />
-            </View>
-          </TouchableOpacity>
-          <View style={styles.avatar}>
-            {avatarImg && (
-              <Image
-                style={styles.avatarImg}
-                source={require("../../../assets/images/avatar.jpg")}
-              />
-            )}
-
-            <TouchableOpacity
-              style={{
-                ...styles.avatarBtn,
-                backgroundColor: avatarImg ? "#ffffff" : "transparent",
-                transform: avatarImg
-                  ? [{ rotate: "45deg" }]
-                  : [{ rotate: "0deg" }],
-              }}
-              activeOpacity={0.8}
-              onPress={addAvatar}
-            >
-              <SvgComponent style={styles.avatarSvg} colorBtn={avatarBtn} />
             </TouchableOpacity>
           </View>
+
+          <Avatar imageAvatar={imageAvatar} setImageAvatar={setImageAvatar} />
 
           <Text style={styles.uzerName}>{login}</Text>
           <FlatList

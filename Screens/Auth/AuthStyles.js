@@ -42,7 +42,6 @@ export const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   formTitle: {
-    marginTop: 32,
     marginBottom: 33,
     textAlign: "center",
     fontSize: 30,

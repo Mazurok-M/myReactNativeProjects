@@ -6,9 +6,6 @@ import {
   TextInput,
   SafeAreaView,
   FlatList,
-  KeyboardAvoidingView,
-  Platform,
-  TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
 
@@ -17,7 +14,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { StyleSheet } from "react-native";
 
 import { useEffect, useState } from "react";
-import { comments } from "../../Component/Comments";
+
 import { useSelector } from "react-redux";
 import {
   addDoc,
@@ -32,7 +29,7 @@ export default function CommentsScreen({ route }) {
   const postId = route.params.postId;
   const [comment, setComment] = useState("");
   const [allComment, setAllComment] = useState([]);
-  const { login, userId } = useSelector((state) => state.auth);
+  const { login, userId, avatar } = useSelector((state) => state.auth);
 
   const createComents = async () => {
     await addDoc(collection(doc(db, "posts", postId), "comments"), {
@@ -40,6 +37,7 @@ export default function CommentsScreen({ route }) {
       login,
       date: Date.now(),
       userId,
+      avatar,
     });
     await updateDoc(doc(db, "posts", postId), {
       totalComment: allComment.length + 1,
@@ -101,20 +99,13 @@ export default function CommentsScreen({ route }) {
                 </View>
               </View>
               <View style={styles.avatar}>
-                <Image
-                  style={styles.avatar}
-                  source={require("../../assets/images/avatar.jpg")}
-                />
+                <Image style={styles.avatar} source={{ uri: item.avatar }} />
               </View>
             </View>
           ) : (
             <View style={styles.wrap}>
               <View style={styles.avatar}>
-                <Text>{item.login}</Text>
-                {/* <Image
-                  style={styles.avatar}
-                  source={require("../../assets/images/avatar-2.jpg")}
-                /> */}
+                <Image style={styles.avatar} source={{ uri: item.avatar }} />
               </View>
               <View style={styles.commentsWrap}>
                 <View style={styles.comment}>

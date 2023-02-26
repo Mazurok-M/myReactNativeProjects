@@ -12,7 +12,7 @@ import {
   StyleSheet,
 } from "react-native";
 
-import { Camera, CameraType } from "expo-camera";
+import { Camera } from "expo-camera";
 import * as Location from "expo-location";
 import * as MediaLibrary from "expo-media-library";
 
@@ -36,7 +36,7 @@ export default function CreatePostsScreen({ navigation }) {
   const [mediaPermission, setMediaPermission] = useState();
   const [locationPermission, setLocationPermission] = useState();
 
-  const { userId, login } = useSelector((state) => state.auth);
+  const { userId, login, avatar } = useSelector((state) => state.auth);
 
   const keyboardHide = () => {
     setIsShowKeyboard(false);

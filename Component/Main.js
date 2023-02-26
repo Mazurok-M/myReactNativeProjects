@@ -7,7 +7,6 @@ import { useFonts } from "expo-font";
 SplashScreen.preventAutoHideAsync();
 
 import { useSelector, useDispatch } from "react-redux";
-import { auth } from "../firebase/config";
 
 import { useRoute } from "../router";
 import { View } from "react-native";
