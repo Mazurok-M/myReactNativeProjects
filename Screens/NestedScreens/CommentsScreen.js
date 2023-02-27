@@ -24,6 +24,9 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../../firebase/config";
+import { async } from "@firebase/util";
+import { helperDate, helperTime } from "../../helpers/helperDate";
+
 
 export default function CommentsScreen({ route }) {
   const postId = route.params.postId;
@@ -49,6 +52,8 @@ export default function CommentsScreen({ route }) {
     getAllComments();
   }, []);
 
+ 
+
   const getAllComments = async () => {
     await onSnapshot(
       collection(doc(db, "posts", postId), "comments"),
@@ -57,15 +62,8 @@ export default function CommentsScreen({ route }) {
           data.docs.map((doc) => ({
             ...doc.data(),
             id: doc.id,
-            dateComment: new Date(doc.data().date).toLocaleString("ua", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            }),
-            time: new Date(doc.data().date).toLocaleString("ua", {
-              hour: "numeric",
-              minute: "numeric",
-            }),
+            dateComment: helperDate(doc.data().date),
+            time:  helperTime(doc.data().date),
           }))
         );
       }

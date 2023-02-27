@@ -86,7 +86,6 @@ export const updateUserAvatar = (photoURL) => async (dispatch) => {
     });
 
     const user = auth.currentUser;
-    console.log(user);
     dispatch(
       authUpdateUserAvatar({
         avatar: user.photoURL,
